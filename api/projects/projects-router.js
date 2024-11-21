@@ -44,14 +44,14 @@ router.post("/", validProject, (req, res, next) => {
         })
 })
 //PUT a Project
-router.put("/:id", validProjectID, validProject, async(req, res, next) => {
-    Project.update(req.params.id,req.body)
-    .then(pr=>{
-        res.status(200).json(pr)
-    })
-    .catch(err=>{
-        next(err)
-    })
+router.put("/:id", validProjectID, validProject, async (req, res, next) => {
+    Project.update(req.params.id, req.body)
+        .then(pr => {
+            res.status(200).json(pr)
+        })
+        .catch(err => {
+            next(err)
+        })
 })
 // Delete a Project
 router.delete("/:id", validProjectID, (req, res, next) => {
@@ -62,6 +62,17 @@ router.delete("/:id", validProjectID, (req, res, next) => {
         .catch(err => {
             next(err)
         })
+})
+//Get Project's Actions
+
+router.get("/:id/actions", validProjectID, (req, res, next) => {
+    Project.getProjectActions(req.params.id)
+    .then(ac=>{
+        res.status(200).json(ac)
+    })
+    .catch(err=>{
+        next(err)
+    })
 })
 
 //Custom Error
