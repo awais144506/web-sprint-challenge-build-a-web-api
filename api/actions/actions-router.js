@@ -38,14 +38,23 @@ router.post('/', validAction, async (req, res, next) => {
         next(error);
     }
 })
+//Put Action
+router.put('/:id',validAction,validActionID, (req, res, next) => {
+    Action.update(req.params.id,req.body)
+    .then(ac=>{
+        res.status(200).json(ac)
+    })
+    .catch(err=>{
+        next(err)
+    })
+})
 //Delete Action 
-router.delete("/:id", validActionID, async(req, res, next) => {
-    try{
-          const deleted = await Action.remove(req.params.id)
-          res.status(200).json(deleted)
+router.delete("/:id", validActionID, async (req, res, next) => {
+    try {
+        const deleted = await Action.remove(req.params.id)
+        res.status(200).json(deleted)
     }
-    catch(error)
-    {
+    catch (error) {
         next(error)
     }
 })
