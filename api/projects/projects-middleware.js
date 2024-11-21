@@ -19,22 +19,35 @@ async function validProjectID(req, res, next) {
 
 async function validProject(req, res, next) {
     try {
-        const { name, description,completed } = req.body
-       
-        if (name && description) {
-            
-            req.name = name
-            req.description = description
-            req.completed = completed !== undefined ? completed : false;
-            next()
+        const { name, description, completed } = req.body;
+
+        // Check for required fields based on the HTTP method
+        if (req.method === "POST") {
+            if (!name || !description) {
+                return next({
+                    status: 400,
+                    message: "Name and description are required for POST requests.",
+                });
+            }
+        } else if (req.method === "PUT") {
+            if (!name || !description || completed === undefined) {
+                return next({
+                    status: 400,
+                    message: "Name, description, and completed are required for PUT requests.",
+                });
+            }
         }
-        else {
-            next({status:400,message:"That is a bad request to post"})
-        }
+
+        // Attach validated fields to the request object
+        req.name = name;
+        req.description = description;
+        req.completed = completed !== undefined ? completed : false;
+
+        next();
+    } catch (error) {
+        next(error);
     }
-    catch (error) {
-        next(error)
-    }}
+}
 
     module.exports = {
         validProjectID,
